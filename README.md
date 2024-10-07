@@ -34,3 +34,17 @@ Make sure you have the following installed:
 
    ```bash
    git clone https://github.com/your-username/Video-Calling-App.git
+
+2. **Navigate to the project directory**:
+
+   ```bash
+   cd Video-Calling-App
+
+3. **Install dependencies**:
+
+   ```bash
+   npm install
+   
+4. **Create a config.js file**:
+   export const APP_ID = ZegoCloud AppId;
+   export const SECRET = "ZegoCloud Secret Key";
