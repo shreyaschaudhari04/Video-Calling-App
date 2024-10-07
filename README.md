@@ -46,5 +46,7 @@ Make sure you have the following installed:
    npm install
    
 4. **Create a config.js file**:
+
+   ```bash
    export const APP_ID = ZegoCloud AppId;
    export const SECRET = "ZegoCloud Secret Key";
