@@ -2,7 +2,7 @@
 
 🚀 A powerful video calling application built with **React.js** and **ZEGOCLOUD SDK**, supporting one-on-one meetings, group video calls, in-call chats, and screen sharing. Easily share meeting links with others and start calls instantly!
 
-🌐 **Deployed on**: [Netlify](https://your-app-link.netlify.app) (Replace with your actual link)
+🌐 **Deployed on**: [Netlify](https://swyftvideoconferencing.netlify.app/) 
 
 ---
 
@@ -28,7 +28,7 @@ Make sure you have the following installed:
 - [Node.js](https://nodejs.org/en/) (v14.x or above)
 - [npm](https://www.npmjs.com/) (comes with Node.js)
 
-### Installation
+### 🔧 Installation
 
 1. **Clone the repository**:
 
