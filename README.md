@@ -50,3 +50,10 @@ Make sure you have the following installed:
    ```bash
    export const APP_ID = ZegoCloud AppId;
    export const SECRET = "ZegoCloud Secret Key";
+
+5. **Run the app locally**:
+
+   ```bash
+   npm start
+   
+The app will run on http://localhost:3000
