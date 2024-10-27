@@ -1,28 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useContext } from 'react-router-dom';
 import { useAuth0 } from "@auth0/auth0-react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const HomePage = () => {
   const [roomId, setRoomId] = useState('');
-  const { loginWithRedirect, user, isAuthenticated, isLoading, logout } = useAuth0();
+  const { loginWithRedirect, user, isAuthenticated, logout } = useAuth0();
   const Navigate = useNavigate();
-  
-  const handleClickOneOnOne = () => {
-    if (!isAuthenticated) {
-      loginWithRedirect();
-  } else {
-      handleOneOnOneCalls();
-  }
-  }
+  const[toastShown, setToastShown] = useState(false);
 
-  const handleClickGroupCall = () => {
-    if (!isAuthenticated) {
-      loginWithRedirect();
-  } else {
-    handleGroupCalls();
-  }
-  }
+  useEffect(() => {
+    if (isAuthenticated && user && !toastShown) {
+      toast.success(`Welcome, ${user.name}!`, {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      setToastShown(true); 
+    }
+  }, [isAuthenticated, user, toastShown]);
  
+
   const handleRoomId = () => {
     const randomId = Math.random().toString(36).substring(2, 8);
     const timeStamp = Date.now().toString().substring(-5); 
@@ -31,7 +29,10 @@ const HomePage = () => {
 
   const handleOneOnOneCalls = () => {
     if(!roomId){
-      alert("Please Generate a room Id");
+      toast.info("Please Generate a Room ID to Proceed", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       return;
     }
     Navigate(`room/${roomId}?type=one-on-one`);
@@ -39,19 +40,32 @@ const HomePage = () => {
 
   const handleGroupCalls = () => {
     if(!roomId){
-      alert("Please Generate a room Id");
+      toast.info("Please Generate a Room ID to Proceed", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       return;
     }
     Navigate(`room/${roomId}?type=group-call`);
   }
 
+  const handlegenerateId = () => {
+    if(isAuthenticated){
+      handleRoomId();
+    }
+    else{
+      toast.info("Please Login To Generate Meeting ID", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+    }
+  }
   
-
   return (
     <>
 <nav class="bg-white border-gray-200 dark:bg-gray-900">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-    <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+    <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
         <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
         <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Swyft Video Call</span>
     </a>
@@ -86,7 +100,13 @@ const HomePage = () => {
 
         {
           isAuthenticated ? <li>
-          <button onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })} href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Logout</button>
+          <button onClick={() => 
+          {
+            logout({ logoutParams: { returnTo: window.location.origin } });
+            setToastShown(false); // Reset the toastShown state
+          }
+        } 
+        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Logout</button>
         </li>
           : <li>
           <button onClick={() => loginWithRedirect()} href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Login</button>
@@ -129,30 +149,32 @@ const HomePage = () => {
               <button
                 type="button"
                 className="mt-4 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                onClick={handleRoomId}
-              >
+                onClick={handlegenerateId}
+                >
                 Generate
               </button>
+              
             </div>
 
             <div className="flex space-x-4">
-              <button
-                type="submit"
-                className="flex-1 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                disabled={!roomId}
-                onClick= {handleClickOneOnOne}
+            <button
+                type="button"
+                className="flex-1 text-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                //disabled={!roomId}
+                onClick= {handleOneOnOneCalls}
               >
                 One On One Call
               </button>
               <button
-                type="submit"
-                className="flex-1 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                disabled={!roomId}
-                onClick={handleClickGroupCall}
+                type="button"
+                className="flex-1 text-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                // disabled={!roomId}
+                onClick={handleGroupCalls}
               >
                 Group Call
               </button>
             </div>
+            <ToastContainer />
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">

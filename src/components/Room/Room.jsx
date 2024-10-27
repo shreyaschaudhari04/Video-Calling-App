@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { ZegoUIKitPrebuilt } from "@zegocloud/zego-uikit-prebuilt";
 import { APP_ID, SECRET } from "../../config";
+import { useAuth0 } from '@auth0/auth0-react';
 import "./Room.css";
 
 function Room() {
@@ -12,6 +13,7 @@ function Room() {
   const videoContainerRef = useRef(null);
   const [joined, setJoined] = useState(false);
   const [callType, setCallType] = useState(""); 
+  const { user} = useAuth0();
 
   const myMeeting = (type) => {
     const appID = APP_ID;
@@ -21,7 +23,7 @@ function Room() {
       serverSecret,
       roomId,
       Date.now().toString(),
-      "You Name"
+      user?.name || "Your Name"
     );
 
     const zp = ZegoUIKitPrebuilt.create(kitToken);
